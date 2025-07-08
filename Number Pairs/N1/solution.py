@@ -8,8 +8,8 @@ def find_pair(d):
             return a, b
     return "NONE"
 
-with open('N1.in', 'r') as infile, \
-     open('N1.txt', 'w') as outfile:
+with open('Number Pairs/N1/N1.in', 'r') as infile, \
+     open('Number Pairs/N1/N1_SOL.txt', 'w') as outfile:
     next(infile)
     for line in infile:
         number = int(line.strip())

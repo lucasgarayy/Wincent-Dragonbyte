@@ -45,7 +45,7 @@ def find_pair_digit_dp(d):
 
 
 with open('Number Pairs/N2/N2.in', 'r') as infile, \
-     open('Number Pairs/N2/N2.txt', 'w') as outfile:
+     open('Number Pairs/N2/N2_SOL.txt', 'w') as outfile:
     next(infile)
     for line in infile:
         number = int(line.strip())

@@ -165,7 +165,7 @@ class Puzzle:
 
 
 with open('Tiling Cheaply/T3/T3.in', 'r') as infile, \
-     open('Tiling Cheaply/T3/T3.txt', 'w') as outfile:
+     open('Tiling Cheaply/T3/T3_MEMO.txt', 'w') as outfile:
     next(infile)
     for line in infile:
         number = int(line.strip())

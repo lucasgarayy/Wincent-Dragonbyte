@@ -1,64 +1,153 @@
 ## Solution Overview
 
-There are 2 solutions attempted, for N1 as the number difference `d` maximum value is 1000 the shown is just a brute force solution. A number `a` starts from 1 up to 10000 and `b` is just `a + d`. `a` and `b` digit sums are compared until a pair with same digit sum is found.
+Two implementations are provided with vastly different approaches and performance characteristics:
 
+### 1. Brute Force (`brute_force.py`)
+A simple iterative approach that tests numbers sequentially.
 
-The solution for N2 and N3 are the same and uses **dynamic programming with memoization** to construct two numbers digit by digit, ensuring they maintain the required difference while having equal digit sums.
-
-### Key Insights
-
-1. **Digit Sum Preservation**: For two numbers to have the same digit sum when their difference is `d`, the digit sum of `d` must be divisible by 9. This is because `digit_sum(b) - digit_sum(a) ≡ b - a ≡ d (mod 9)`.
-
-2. **Digit-by-Digit Construction**: We can build numbers `a` and `b` simultaneously by processing digits from least significant to most significant, maintaining:
-   - The difference constraint: `b - a = d`
-   - The digit sum constraint: `digit_sum(a) = digit_sum(b)`
+### 2. Dynamic Programming (`digit_dp.py`)
+An optimized digit-by-digit construction using memoized recursion.
 
 ## Algorithm Breakdown
 
-### 1. Initial Validation
-```python
-if d == 0:
-    return 0, 0  # Trivial case: both numbers are the same
+### 1. Brute Force Approach
 
-if d % 9 != 0:
-    return None  # Impossible case: digit sums can't be equal
+#### Core Strategy:
+```python
+def find_pair(d):
+    for a in range(1, 1000000):
+        b = d + a
+        if sum_digits(a) == sum_digits(b):
+            return a, b
+    return None
 ```
 
-### 2. Setup
-```python
-digits = list(map(int, str(d)[::-1])) + [0]  # Reverse d's digits, add padding
-L = len(digits)
-max_delta = 9 * L  # Maximum possible difference in digit sums
+- **Linear Search**: Tests values of `a` from 1 to 1,000,000
+- **Direct Computation**: For each `a`, computes `b = a + d`
+- **Digit Sum Comparison**: Checks if `sum_digits(a) == sum_digits(b)`
+- **First Match**: Returns the first valid pair found
+
+#### Performance Characteristics:
+- **Time Complexity**: O(n) where n is the search limit (1,000,000)
+- **Space Complexity**: O(1)
+- **Suitable for**: Small differences where solutions exist early
+- **Limitation**: Fixed search bound may miss solutions
+
+### 2. Dynamic Programming Approach
+
+#### Mathematical Foundation:
+The key insight is that for two numbers to have equal digit sums when their difference is `d`:
+```
+digit_sum(b) - digit_sum(a) ≡ b - a ≡ d (mod 9)
 ```
 
-### 3. Dynamic Programming State
+Therefore, if `d % 9 ≠ 0`, no solution exists.
+
+#### Core Strategy:
+```python
+def find_pair_digit_dp(d):
+    if d == 0:
+        return 0, 0
+    
+    if d % 9 != 0:
+        return None  # Impossible case
+    
+    # Build numbers digit by digit
+    digits = list(map(int, str(d)[::-1])) + [0]
+    L = len(digits)
+    max_delta = 9 * L
+```
+
+#### State Space Definition:
 The DP function `dfs(pos, carry, delta)` represents:
 - `pos`: Current digit position (0 = least significant)
 - `carry`: Carry from previous digit addition
 - `delta`: Current difference in digit sums (`sum(a_digits) - sum(b_digits)`)
 
-### 4. Core Logic
-For each position, we:
-1. Try all possible digits `a_i` for number `a`
-2. Calculate the corresponding digit `b_i` for number `b`:
-   ```python
-   s = a_i + d_i + carry  # Sum including carry
-   b_i = s % 10           # Digit for b
-   new_carry = s // 10    # Carry for next position
-   ```
-3. Update the digit sum difference:
-   ```python
-   new_delta = delta + (a_i - b_i)
-   ```
-4. Prune impossible branches (when `|new_delta| > max_delta`)
-5. Recursively solve for the next position
-
-### 5. Base Case
+#### Digit Construction Logic:
 ```python
-if pos == L:
-    return [] if (carry == 0 and delta == 0) else None
+for a_i in range(10):
+    s = a_i + d_i + carry
+    b_i = s % 10
+    new_carry = s // 10
+    
+    new_delta = delta + (a_i - b_i)
+    if abs(new_delta) > max_delta:
+        continue  # Pruning impossible branches
+    
+    res = dfs(pos + 1, new_carry, new_delta)
+    if res is not None:
+        return [a_i] + res
 ```
-Success when we've processed all digits with no remaining carry and balanced digit sums.
 
-### 6. Result Construction
-Convert the digit array back to the actual number `a`, then compute `b = a + d`.
+#### Key Optimizations:
+1. **Early Termination**: Returns immediately when `d % 9 ≠ 0`
+2. **Memoization**: Uses `@lru_cache(None)` to avoid recomputing states
+3. **Pruning**: Skips branches where `|delta| > max_delta`
+4. **Digit-by-Digit**: Constructs minimal solutions systematically
+
+## Performance Comparison
+
+### Brute Force (`brute_force.py`):
+- **Time Complexity**: O(n) where n ≤ 1,000,000
+- **Space Complexity**: O(1)
+- **Strengths**: Simple, guaranteed to find small solutions
+- **Weaknesses**: Limited search range, inefficient for large differences
+
+### Dynamic Programming (`solution.py`):
+- **Time Complexity**: O(10 × L × C × D) where L = digits in d, C = carry states, D = delta states
+- **Space Complexity**: O(L × C × D) for memoization
+- **Strengths**: Finds minimal solutions, handles large differences, mathematically complete
+- **Weaknesses**: More complex implementation, higher memory usage
+
+## Key Insights
+
+### 1. Mathematical Constraint
+```python
+if d % 9 != 0:
+    return None  # No solution exists
+```
+This eliminates impossible cases immediately, saving computation time.
+
+### 2. Digit Sum Preservation
+For any two numbers `a` and `b`:
+- `digit_sum(a) ≡ a (mod 9)`
+- `digit_sum(b) ≡ b (mod 9)`
+- Therefore: `digit_sum(b) - digit_sum(a) ≡ b - a ≡ d (mod 9)`
+
+### 3. Minimal Solution Construction
+The DP approach constructs the lexicographically smallest solution by:
+- Processing digits from least to most significant
+- Trying digit values 0-9 in order
+- Using memoization to avoid redundant computations
+
+## Algorithm Breakdown Detail
+
+### Brute Force Process:
+1. **Iterate**: `a` from 1 to 1,000,000
+2. **Calculate**: `b = a + d`
+3. **Check**: `sum_digits(a) == sum_digits(b)`
+4. **Return**: First valid pair or None
+
+### DP Process:
+1. **Validate**: Check if `d % 9 == 0`
+2. **Setup**: Reverse digits of `d`, add padding
+3. **Recursion**: Build digits maintaining constraints
+4. **Memoization**: Cache results for (position, carry, delta)
+5. **Construct**: Convert digit array back to number
+
+## Performance Characteristics
+
+### Small Differences (d < 1000):
+- **Brute Force**: Fast, finds solutions quickly
+- **DP**: Overhead may be higher, but guaranteed minimal solution
+
+### Large Differences (d > 1000):
+- **Brute Force**: May fail if solution > 1,000,000
+- **DP**: Efficiently constructs minimal solutions regardless of size
+
+### Impossible Cases:
+- **Brute Force**: Searches entire range before failing
+- **DP**: Immediately returns None after modulo check
+
+The DP solution is mathematically complete and efficient for all valid inputs, while the brute force approach provides a simple alternative for small cases with the risk of missing solutions beyond its search limit.

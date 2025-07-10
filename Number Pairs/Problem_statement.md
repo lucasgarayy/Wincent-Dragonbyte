@@ -19,19 +19,19 @@ The numbers in your output may have up to 50 digits. (It is guaranteed that if a
 ### Subproblem N1 (16 Points)
 Input file N1.in
 Constraints:
-- $ t \leq 200$
+- $t \leq 200$
 - in each test case, $1 \leq d \leq 1000$
 - No test case with the answer “NONE”
 
 ### Subproblem N2 (32 Points)
 Input file N2.in
 Constraints:
-- $ t \leq 200$
+- $t \leq 200$
 - in each test case, $1 \leq d \leq 10^6$
 
 
 ### Subproblem N3 (52 Points)
 Input file N3.in
 Constraints:
-- $ t \leq 200$
+- $t \leq 200$
 - in each test case, $1 \leq d \leq 10^{18}$

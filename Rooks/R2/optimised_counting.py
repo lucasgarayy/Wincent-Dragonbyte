@@ -1,4 +1,3 @@
-from tqdm import tqdm
 from bisect import bisect_left, insort
 
 def count_rook_moves(d, rooks):
@@ -132,7 +131,7 @@ def solve_from_file(input_file, output_file):
     t = int(lines[line_idx].strip())
     line_idx += 1
     
-    for _ in tqdm(range(t)):
+    for _ in range(t):
         d, n = map(int, lines[line_idx].strip().split())
         line_idx += 1
         
@@ -148,4 +147,4 @@ def solve_from_file(input_file, output_file):
     with open(output_file, 'w') as f:
         f.write('\n'.join(results) + '\n')
 
-solve_from_file('Rooks/R2/R2.in', 'Rooks/R2/R2.txt')
+solve_from_file('Rooks/R2/R2.in', 'Rooks/R2/R2_SOL.txt')

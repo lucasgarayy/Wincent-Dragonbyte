@@ -1,5 +1,3 @@
-from tqdm import tqdm
-
 def count_rook_moves(d, rooks):
     MOD = 10**9 + 7
     
@@ -117,30 +115,28 @@ def count_rook_moves(d, rooks):
     return total_ways
 
 
-def solve_from_file(input_file, output_file):
-    with open(input_file, 'r') as f:
-        lines = f.readlines()
-    
-    results = []
-    line_idx = 0
-    
-    t = int(lines[line_idx].strip())
+
+with open('Rooks/R2/R2.in', 'r') as f:
+    lines = f.readlines()
+
+results = []
+line_idx = 0
+
+t = int(lines[line_idx].strip())
+line_idx += 1
+
+for _ in range(t):
+    d, n = map(int, lines[line_idx].strip().split())
     line_idx += 1
     
-    for _ in tqdm(range(t)):
-        d, n = map(int, lines[line_idx].strip().split())
+    rooks = []
+    for _ in range(n):
+        r, c, t = lines[line_idx].strip().split()
+        rooks.append((int(r), int(c), t))
         line_idx += 1
-        
-        rooks = []
-        for _ in range(n):
-            r, c, t = lines[line_idx].strip().split()
-            rooks.append((int(r), int(c), t))
-            line_idx += 1
-        
-        result = count_rook_moves(d, rooks)
-        results.append(str(result))
     
-    with open(output_file, 'w') as f:
-        f.write('\n'.join(results) + '\n')
+    result = count_rook_moves(d, rooks)
+    results.append(str(result))
 
-solve_from_file('Rooks/R1/R1.in', 'Rooks/R1/R1.txt')
+with open('Rooks/R2/R2_BF.txt', 'w') as f:
+    f.write('\n'.join(results) + '\n')

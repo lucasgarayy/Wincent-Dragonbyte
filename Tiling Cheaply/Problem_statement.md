@@ -2,7 +2,9 @@
 ### Statement
 We have four types of tiles: an `L` trimino, an `S` tetromino, a `Z` tetromino, and an `O` tetromino, as shown below. Note that L is just a trimino.
 
-![image](Tiling%20Cheaply/Tiling_Cheaply.png "Possible Tiles")
+![Possible Tiles](<Tiling_Cheaply.png> "Possible Tiles")
+
+
 
 We want to use the tiles to tile an $n x n$ square perfectly (every cell covered exactly once, nothing sticking out). Each piece can be rotated by multiples of 90 degrees while doing so.
 

@@ -4,7 +4,7 @@ Hey there!
 
 This is where I keep all my solutions for the Wincent DragonByte coding challenges. It's been quite the journey working through these problems, and I wanted to organize everything in one place.
 
-Big thanks to **Wincent** for creating these awesome challenges! If you want to check out more of his work, head over to [his website](https://www.wincentdragonbyte.com/).
+Big thanks to **Wincent** for creating these awesome challenges! If you want to check out more of his work, head over to [the competition website](https://www.wincentdragonbyte.com/).
 
 ## What's Inside
 

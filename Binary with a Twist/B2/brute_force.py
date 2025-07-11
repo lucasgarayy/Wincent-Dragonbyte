@@ -1,4 +1,3 @@
-from tqdm import tqdm
 import math 
 def base_d(n):
     if n == 0 or n==1 or n==3 or n==10:
@@ -22,9 +21,9 @@ def base_d(n):
     return n - 1
 
 with open('Binary with a Twist/B2/B2.in', 'r') as infile, \
-     open('Binary with a Twist/B2/B2.txt', 'w') as outfile:
+     open('Binary with a Twist/B2/B2_SOL.txt', 'w') as outfile:
      next(infile)
-     for line in tqdm(infile):
+     for line in infile:
          number = int(line.strip())
          d = base_d(number)
          outfile.write(f'{d}' +'\n')
